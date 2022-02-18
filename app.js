@@ -9,6 +9,7 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./routes/tasks');
+const tasksApiRouter = require('./routes/tasks');
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(cookieParser());
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
-  indentedSyntax: true, // true = .sass and false = .scss
+  indentedSyntax: false, // true = .sass and false = .scss
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,5 +28,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tasks', tasksRouter);
+app.use('/api/tasks', tasksApiRouter);
+
+const nunjucks = require('nunjucks')
+
+nunjucks.configure('views', {
+  autoescape: true,
+  express: app
+});
 
 module.exports = app;
